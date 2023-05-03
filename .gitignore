@@ -160,8 +160,4 @@ cython_debug/
 #.idea/
 
 semana-01/.DS_Store
-
-semana-02
-semana-03
-semana-04
-semana-05
+.DS_Store
