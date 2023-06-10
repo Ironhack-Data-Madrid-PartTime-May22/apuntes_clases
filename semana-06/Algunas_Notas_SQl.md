@@ -47,3 +47,4 @@
 </table>
 
 Este orden es importante para tener en cuenta para los alias de las columnas y cuando podremos usarlos o no. 
+
