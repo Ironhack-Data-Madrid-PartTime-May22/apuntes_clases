@@ -162,16 +162,141 @@ ORDER BY beneficio;
 
 
 
-SELECT title as titulo, (price * royalty/100) as beneficio
-FROM titles
-WHERE (price * royalty)/100 IS NOT NULL
-ORDER BY beneficio;
+
+USE publications;
+
+SELECT * FROM titles;
 
 
-SELECT title as titulo, (price * royalty/100) as beneficio
+SELECT title as titulo, price as precio
 FROM titles
-WHERE price  IS NOT NULL
-ORDER BY beneficio;
+WHERE price IS NOT NULL;
+
+
+
+SELECT title, price, au_id 
+FROM titles
+INNER JOIN titleauthor ON titles.title_id = titleauthor.title_id;
+
+
+
+SELECT title, price, titleauthor.au_id, au_fname, au_lname, state
+FROM titles 
+INNER JOIN titleauthor ON titles.title_id = titleauthor.title_id
+INNER JOIN authors ON titleauthor.au_id = authors.au_id;
+
+
+SELECT title, price, ta.au_id, au_fname, au_lname, state
+FROM titles as t
+INNER JOIN titleauthor as ta ON t.title_id = ta.title_id
+INNER JOIN authors as a ON ta.au_id = a.au_id;
+
+
+SELECT state, AVG(price) as precio_medio_libros
+FROM titles  t
+INNER JOIN titleauthor  ta ON t.title_id = ta.title_id
+INNER JOIN authors  a ON ta.au_id = a.au_id
+WHERE state = "CA" AND price IS NOT NULL OR state = "UT"
+GROUP BY state
+ORDER BY precio_medio_libros;
+
+
+SELECT * 
+FROM titles as t
+NATURAL JOIN titleauthor;
+
+
+SELECT * 
+FROM titles as t
+LEFT JOIN titleauthor as ta ON t.title_id = ta.title_id;
+
+SELECT * 
+FROM titles as t
+CROSS JOIN titleauthor as ta ON t.title_id = ta.title_id;
+
+-- 1. ¿Cuántos libros/titulos diferentes tiene cada tienda?
+SELECT stor_name, COUNT(t.title_id) as total_titulos
+FROM stores as st
+INNER JOIN sales as sa ON st.stor_id = sa.stor_id 
+INNER JOIN titles as t ON t.title_id = sa.title_id
+GROUP BY stor_name;
+
+
+
+SELECT * 
+FROM stores
+NATURAL JOIN sales ;
+
+-- 3. ¿Cuantos autores tiene cada libro? Muestra solo los 5 primeros resultados ordenados de mayor a menor en base el número de autores
+SELECT title, COUNT(a.au_id) as total_autores
+FROM authors AS a
+INNER JOIN titleauthor AS ta ON a.au_id = ta.au_id
+INNER JOIN titles AS t ON t.title_id = ta.title_id
+GROUP BY title
+ORDER BY total_autores DESC
+LIMIT 5;
+
+-- 4. Beneficio por autor
+SELECT concat(au_lname, " ", au_fname) as author, SUM(((price * royalty)/100)* qty) as benefits
+FROM  authors as au
+INNER JOIN titleauthor as ta on au.au_id = ta.au_id
+INNER JOIN titles as t on t.title_id = ta.title_id
+INNER JOIN sales as sa on sa.title_id = t.title_id
+GROUP BY author
+ORDER BY author;
+
+SELECT concat(au_lname, " ", au_fname) as author, (((price * royalty)/100)* qty) as benefits
+FROM  authors as au
+INNER JOIN titleauthor as ta on au.au_id = ta.au_id
+INNER JOIN titles as t on t.title_id = ta.title_id
+INNER JOIN sales as sa on sa.title_id = t.title_id
+ORDER BY author;
+
+-- ¿Cuantos empleados hay en cada editorial?
+SELECT pub_name as editorial, COUNT(emp_id) as total_empleados
+FROM publishers as pu
+INNER JOIN employee AS em ON em.pub_id = pu.pub_id
+GROUP BY editorial
+ORDER BY total_empleados DESC;
+
+-- Mejora la query anterior añadiendo la fecha de la ultima persona que se incorporó a cada editorial
+SELECT pub_name as editorial, COUNT(emp_id) as total_empleados, MAX(hire_date) as ultima_contratacion
+FROM publishers as pu
+INNER JOIN employee AS em ON em.pub_id = pu.pub_id
+GROUP BY editorial
+ORDER BY total_empleados DESC;
+
+-- Cuantos empleados tenemos en cada una de las editoriales? Seleccionad solo aquellas editoriales que tengan mas de 5 empleados
+
+SELECT pub_name as editorial, COUNT(emp_id) as total_empleados
+FROM publishers as pu
+INNER JOIN employee AS em ON em.pub_id = pu.pub_id 
+GROUP BY editorial
+HAVING  COUNT(emp_id)  > 5
+ORDER BY total_empleados DESC;
+
+-- ¿que tienda vende mas libros en septiembre?
+SELECT stor_name as tienda, MAX(qty) as maximo
+FROM sales as sl
+INNER JOIN stores as st ON  sl.stor_id = st.stor_id
+WHERE MONTH(ord_date) = 9
+GROUP BY tienda
+ORDER BY maximo DESC
+LIMIT 1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
