@@ -3,7 +3,7 @@
 
 ## Equipos
 
-Cada equipo constará dos participantes. En vuestro los equipos son: 
+Cada equipo constará dos participantes. En vuestro caso los equipos son: 
 
 - EQUIPO 1:
     - Valentín
