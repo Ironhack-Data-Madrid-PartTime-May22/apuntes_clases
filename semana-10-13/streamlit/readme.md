@@ -28,3 +28,5 @@ Paso 4: Eliminar el entorno (opcional):
    ```
 
 Estos son los pasos esenciales para crear un entorno con Conda. Los entornos te permiten aislar tus proyectos y sus dependencias, lo que facilita el mantenimiento y la gestión de versiones de paquetes. Recuerda que cada vez que trabajas en un proyecto específico, es una buena práctica crear un nuevo entorno para ese proyecto y así evitar conflictos entre diferentes proyectos con diferentes dependencias.
+
+Si quieres saber mas pincha [aqui](https://github.com/Ironhack-Data-Madrid-PartTime-May22/apuntes_clases/blob/main/semana-01/1.3-Conda.ipynb)
